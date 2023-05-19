@@ -1,39 +1,26 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
-  <head>
-    <style>
-      body {
-        margin: 0px;
-        padding: 0px;
-      }
-    </style>
-  </head>
-  <body>
-    <canvas id="myCanvas" width="1920" height="1080"></canvas>
-    <script>
-      function writeMessage(canvas, message) {
-        var context = canvas.getContext('2d');
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        context.font = '18pt Calibri';
-        context.fillStyle = 'black';
-        context.fillText(message, 10, 25);
-      }
-      function getMousePos(canvas, evt) {
-        var rect = canvas.getBoundingClientRect();
-        return {
-          x: evt.clientX - rect.left,
-          y: evt.clientY - rect.top
-        };
-      }
-      var canvas = document.getElementById('myCanvas');
-      var context = canvas.getContext('2d');
+<head>
+  <title>Pong Game</title>
 
-      canvas.addEventListener('mousemove', function(evt) {
-        var mousePos = getMousePos(canvas, evt);
-        var message = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
-        writeMessage(canvas, message);
-        console.log(message)
-      }, false);
-    </script>
-  </body>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+  <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <!--FPS-->
+  <div class="fps">
+    <span id="fps">--</span> FPS
+    <script src="fps.js"></script>
+  </div>
+  <script src="cam.js" type="module"></script>
+  <div class="container" id="camara">
+    <button id="singlePlayerButton">AI mode</button>
+    <video class="input_video" hidden width="1280px" height="720px"></video>
+    <canvas class="output_canvas videoElement game" width="1280px" height="720px"></canvas>
+  </div>
+</body>
 </html>

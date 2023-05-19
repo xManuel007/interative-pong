@@ -53,7 +53,7 @@ const ball = {
 
 // check for collision between two objects using axis-aligned bounding box (AABB)
 // @see https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
-collides = (obj1, obj2) => {
+const collides = (obj1, obj2) => {
   return obj1.x < obj2.x + obj2.width &&
          obj1.x + obj1.width > obj2.x &&
          obj1.y < obj2.y + obj2.height &&
@@ -61,7 +61,7 @@ collides = (obj1, obj2) => {
 }
 
 // game loop
-loop = () => {
+const loop = () => {
   requestAnimationFrame(loop);
   context.clearRect(0,0,canvas.width,canvas.height);
   movePaddles() //move X Y
@@ -73,23 +73,23 @@ loop = () => {
   resetSystem() //reset the ball if it got lost
   collideSystem() //ball collide to something
   drawball() //draw the ball
-  drawWall() //draw the wall 
+  drawWall() //draw the wall
   drawWeb() //draw the web
 }
 
-movePaddles = () => {
+const movePaddles = () => {
   leftPaddle.y += leftPaddle.dy;
   rightPaddle.y += rightPaddle.dy;
   leftPaddle.x += leftPaddle.dx;
   rightPaddle.x += rightPaddle.dx;
 }
 
-movePaddleSystem = () => {
+const movePaddleSystem = () => {
   leftPaddle.y < grid ? leftPaddle.y = grid : null
   leftPaddle.y > maxPaddleY ?  leftPaddle.y = maxPaddleY : null
-  
+
   rightPaddle.y < grid ? rightPaddle.y = grid : null
-  rightPaddle.y > maxPaddleY ? rightPaddle.y = maxPaddleY : null 
+  rightPaddle.y > maxPaddleY ? rightPaddle.y = maxPaddleY : null
 
   leftPaddle.x < grid ? leftPaddle.x = grid : null
   leftPaddle.x > maxPaddleX ? leftPaddle.x = maxPaddleX : null
@@ -101,7 +101,7 @@ movePaddleSystem = () => {
   rightPaddle.x < maxPaddleX/2 ? rightPaddle.x = maxPaddleX/2 : null
 }
 
-drawWall = () => {
+const drawWall = () => {
   context.fillStyle = 'lightgrey';
   context.fillRect(0, 0, canvas.width, grid);
   context.fillRect(0, canvas.height - grid, canvas.width, canvas.height);
@@ -117,32 +117,32 @@ drawWall = () => {
   }
 }
 
-drawWeb = () => {
+const drawWeb = () => {
   for (let i = grid; i < canvas.height - grid; i += grid * 2) {
     context.fillRect(canvas.width / 2 - grid / 2, i, grid, grid);
   }
 }
 
-drawball = () => {
+const drawball = () => {
   context.fillStyle = 'gray';
   context.fillRect(ball.x, ball.y, ball.width, ball.height);
 }
 
-ballVelocity = () => {
+const ballVelocity = () => {
   ball.x += ball.dx;
   ball.y += ball.dy;
 }
-drawLeftPaddle = () =>{
-    context.fillStyle = 'grey'; 
+const drawLeftPaddle = () =>{
+    context.fillStyle = 'grey';
     context.fillRect(leftPaddle.x, leftPaddle.y, leftPaddle.width, leftPaddle.height);
 }
 
-drawRightPaddle = () => {
-    context.fillStyle = 'black'; 
+const drawRightPaddle = () => {
+    context.fillStyle = 'black';
     context.fillRect(rightPaddle.x, rightPaddle.y, rightPaddle.width, rightPaddle.height);
 }
 
-collideSystem = () => {
+const collideSystem = () => {
   if (collides(ball, leftPaddle)) {
     ball.dx *= -1;
 
@@ -160,7 +160,7 @@ collideSystem = () => {
 
 }
 
-resetSystem = () => {
+const resetSystem = () => {
   if ( (ball.x < 0 || ball.x > canvas.width) && !ball.resetting) {
     ball.resetting = true;
 
@@ -173,14 +173,14 @@ resetSystem = () => {
   }
 }
 
-scoreSystem = () => {
+const scoreSystem = () => {
   if(ball.x < 0){
     RightScore++
     document.getElementById('LeftScore').innerHTML = 'Score: ' + LeftScore
     document.getElementById('RightScore').innerHTML = 'Score: ' + RightScore
   }else if(ball.x > canvas.width){
     LeftScore++
-    document.getElementById('LeftScore').innerHTML = 'Score: ' + LeftScore  
+    document.getElementById('LeftScore').innerHTML = 'Score: ' + LeftScore
     document.getElementById('RightScore').innerHTML = 'Score: ' + RightScore
   }
 }
@@ -237,7 +237,7 @@ document.addEventListener('keyup', (e) => {
 });
 
 
-getMousePos = (evt) => {
+const getMousePos = (evt) => {
   var rect = canvas.getBoundingClientRect();
   return {
     x: evt.clientX - rect.left,
@@ -257,7 +257,7 @@ canvas.addEventListener('mousemove', (e) => {
 
 requestAnimationFrame(loop);
 
-/* 
+/*
 Pendientes:
   Set win
   Set Pause and Play
