@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Pong Game</title>
+  <title>Interative Pong</title>
 
   <link rel="stylesheet" type="text/css" href="styles.css">
   <meta charset="UTF-8">
@@ -16,9 +16,22 @@
     <span id="fps">--</span> FPS
     <script src="fps.js"></script>
   </div>
-  <script src="cam.js" type="module"></script>
+  <script src="game.js" type="module"></script>
+
   <div class="container" id="camara">
-    <button id="singlePlayerButton">AI mode</button>
+    <div class="title">Interative Pong</div>
+    <div class="actions">
+      <button id="pause-button">Pause</button>
+      <button id="play-button">Play</button>
+      <button id="reset-button">Restart Game</button>
+    </div>
+    <div class="info">
+      <p id="winner-text"></p>
+      <div class="score">
+        <p id="right-score">Score: 0</p>
+        <p id="left-score">Score: 0</p>
+      </div>
+    </div>
     <video class="input_video" hidden width="1280px" height="720px"></video>
     <canvas class="output_canvas videoElement game" width="1280px" height="720px"></canvas>
   </div>

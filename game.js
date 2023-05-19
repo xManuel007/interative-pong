@@ -1,266 +1,220 @@
-const canvas = document.getElementById('game');
-const context = canvas.getContext('2d');
-const grid = 20;
-const paddleHeight = grid * 5; // 100
-const paddleWidht = grid
-const maxPaddleY = canvas.height - grid - paddleHeight;
-const maxPaddleX = canvas.width - grid - 20;
+const videoElement = document.getElementsByClassName('input_video')[0];
+const canvasElement = document.getElementsByClassName('output_canvas')[0];
+const canvasCtx = canvasElement.getContext('2d');
+
+// Dimensiones y posición de los paddles
+const paddleWidth = 20;
+const paddleHeight = 100;
+const paddleMargin = 50;
+let leftPaddleY = canvasElement.height / 2 - paddleHeight / 2;
+let rightPaddleY = canvasElement.height / 2 - paddleHeight / 2;
+
+//score
+var leftScore = 0;
+var rightScore = 0;
 
 
-var paddleSpeed = 7;
-var ballSpeed = 8;
-var LeftScore = 0
-var RightScore = 0
-
-const leftPaddle = {
-  // Palito apareciendo en medio al inicio
-  x: grid * 2,
-  y: canvas.height / 2 - paddleHeight / 2,
-  width: grid,
-  height: paddleHeight,
-
-  // paddle velocity
-  dy: 0,
-  dx: 0
-};
-
-const rightPaddle = {
-  // Palito apareciendo en medio al inicio
-  x: canvas.width - grid * 3,
-  y: canvas.height / 2 - paddleHeight / 2,
-  width: grid,
-  height: paddleHeight,
-
-  // paddle velocity
-  dy: 0,
-  dx: 0
-};
-
-const ball = {
-  // Bolita saliendo de enmedio
-  x: canvas.width / 2,
-  y: canvas.height / 2,
-  width: grid,
-  height: grid,
-
-  // keep track of when need to reset the ball position
-  resetting: false,
-
-  // ball velocity (start going to the top-right corner)
-  dx: ballSpeed,
-  dy: -ballSpeed
-};
-
-// check for collision between two objects using axis-aligned bounding box (AABB)
-// @see https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
-const collides = (obj1, obj2) => {
-  return obj1.x < obj2.x + obj2.width &&
-         obj1.x + obj1.width > obj2.x &&
-         obj1.y < obj2.y + obj2.height &&
-         obj1.y + obj1.height > obj2.y;
-}
-
-// game loop
-const loop = () => {
-  requestAnimationFrame(loop);
-  context.clearRect(0,0,canvas.width,canvas.height);
-  movePaddles() //move X Y
-  movePaddleSystem() //Paddle's mechanic in the walls
-  drawLeftPaddle() //draw left paddle
-  drawRightPaddle() //draw right paddle
-  ballVelocity() //physics to the ball
-  scoreSystem() //set the score
-  resetSystem() //reset the ball if it got lost
-  collideSystem() //ball collide to something
-  drawball() //draw the ball
-  drawWall() //draw the wall
-  drawWeb() //draw the web
-}
-
-const movePaddles = () => {
-  leftPaddle.y += leftPaddle.dy;
-  rightPaddle.y += rightPaddle.dy;
-  leftPaddle.x += leftPaddle.dx;
-  rightPaddle.x += rightPaddle.dx;
-}
-
-const movePaddleSystem = () => {
-  leftPaddle.y < grid ? leftPaddle.y = grid : null
-  leftPaddle.y > maxPaddleY ?  leftPaddle.y = maxPaddleY : null
-
-  rightPaddle.y < grid ? rightPaddle.y = grid : null
-  rightPaddle.y > maxPaddleY ? rightPaddle.y = maxPaddleY : null
-
-  leftPaddle.x < grid ? leftPaddle.x = grid : null
-  leftPaddle.x > maxPaddleX ? leftPaddle.x = maxPaddleX : null
-
-  rightPaddle.x < grid ? rightPaddle.x = grid : null
-  rightPaddle.x > maxPaddleX ? rightPaddle.x = maxPaddleX : null
-
-  leftPaddle.x > maxPaddleX/2 ? leftPaddle.x = maxPaddleX/2 : null
-  rightPaddle.x < maxPaddleX/2 ? rightPaddle.x = maxPaddleX/2 : null
-}
-
-const drawWall = () => {
-  context.fillStyle = 'lightgrey';
-  context.fillRect(0, 0, canvas.width, grid);
-  context.fillRect(0, canvas.height - grid, canvas.width, canvas.height);
-
-  // prevent ball from going through walls by changing its velocity
-  if (ball.y < grid) {
-    ball.y = grid;
-    ball.dy *= -1;
-  }
-  else if (ball.y + grid > canvas.height - grid) {
-    ball.y = canvas.height - grid * 2;
-    ball.dy *= -1;
-  }
-}
-
-const drawWeb = () => {
-  for (let i = grid; i < canvas.height - grid; i += grid * 2) {
-    context.fillRect(canvas.width / 2 - grid / 2, i, grid, grid);
-  }
-}
-
-const drawball = () => {
-  context.fillStyle = 'gray';
-  context.fillRect(ball.x, ball.y, ball.width, ball.height);
-}
-
-const ballVelocity = () => {
-  ball.x += ball.dx;
-  ball.y += ball.dy;
-}
-const drawLeftPaddle = () =>{
-    context.fillStyle = 'grey';
-    context.fillRect(leftPaddle.x, leftPaddle.y, leftPaddle.width, leftPaddle.height);
-}
-
-const drawRightPaddle = () => {
-    context.fillStyle = 'black';
-    context.fillRect(rightPaddle.x, rightPaddle.y, rightPaddle.width, rightPaddle.height);
-}
-
-const collideSystem = () => {
-  if (collides(ball, leftPaddle)) {
-    ball.dx *= -1;
-
-    // move ball next to the paddle otherwise the collision will happen again
-    // in the next frame
-    ball.x = leftPaddle.x + leftPaddle.width;
-  }
-  else if (collides(ball, rightPaddle)) {
-    ball.dx *= -1;
-
-    // move ball next to the paddle otherwise the collision will happen again
-    // in the next frame
-    ball.x = rightPaddle.x - ball.width;
-  }
-
-}
-
-const resetSystem = () => {
-  if ( (ball.x < 0 || ball.x > canvas.width) && !ball.resetting) {
-    ball.resetting = true;
-
-    // give some time for the player to recover before launching the ball again
-    setTimeout(() => {
-      ball.resetting = false;
-      ball.x = canvas.width / 2;
-      ball.y = canvas.height / 2;
-    }, 400);
-  }
-}
-
-const scoreSystem = () => {
-  if(ball.x < 0){
-    RightScore++
-    document.getElementById('LeftScore').innerHTML = 'Score: ' + LeftScore
-    document.getElementById('RightScore').innerHTML = 'Score: ' + RightScore
-  }else if(ball.x > canvas.width){
-    LeftScore++
-    document.getElementById('LeftScore').innerHTML = 'Score: ' + LeftScore
-    document.getElementById('RightScore').innerHTML = 'Score: ' + RightScore
-  }
-}
-
-// Controles para mover el paddle
-document.addEventListener('keydown', (e) => {
-  // Eje Y
-  if (e.key === 'ArrowUp') {
-    rightPaddle.dy = -paddleSpeed;
-  }
-  else if (e.key === 'ArrowDown') {
-    rightPaddle.dy = paddleSpeed;
-  }
-  //Eje X
-  else if (e.key === 'ArrowLeft') {
-    rightPaddle.dx = -paddleSpeed;
-  }
-  else if (e.key === 'ArrowRight') {
-    rightPaddle.dx = paddleSpeed;
-  }
+// Dimensiones y posición de la bolita
+const ballSize = 15;
+let ballX = canvasElement.width / 2 - ballSize / 2;
+let ballY = canvasElement.height / 2 - ballSize / 2;
+let ballSpeedX = 5;
+let ballSpeedY = 5;
 
 
-  if (e.key === 'w') {
-    leftPaddle.dy = -paddleSpeed;
-  }else if (e.key === 's') {
-    leftPaddle.dy = paddleSpeed;
-  }
-  if (e.key === 'a') {
-    leftPaddle.dx = -paddleSpeed;
-  }else if (e.key === 'd') {
-    leftPaddle.dx = paddleSpeed;
-  }
+//Pausa
+const pauseButton = document.getElementById('pause-button');
+const playButton = document.getElementById('play-button');
 
-  //pause
-  if(e.key === 'p'){
-    requestAnimationFrame(loop);
-  }
+let isPaused = true;
+
+pauseButton.addEventListener('click', () => {
+  isPaused = true;
+  resetBall()
+});
+
+playButton.addEventListener('click', () => {
+  isPaused = false;
 });
 
 
 
+//score
+const drawScores = () => {
+  const leftScoreElement = document.getElementById('left-score');
+  const rightScoreElement = document.getElementById('right-score');
 
-// Controles, proximamente ver como se pueden mover de diferentes metodos
-document.addEventListener('keyup', (e) => {
-  if (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-    rightPaddle.dy = 0;
-    rightPaddle.dx = 0;
-  }
-
-  if (e.key === 'w' || e.key === 's' || e.key === 'a' || e.key === 'd') {
-    leftPaddle.dy = 0;
-    leftPaddle.dx = 0;
-  }
-});
-
-
-const getMousePos = (evt) => {
-  var rect = canvas.getBoundingClientRect();
-  return {
-    x: evt.clientX - rect.left,
-    y: evt.clientY - rect.top
-  };
+  leftScoreElement.textContent = `Score: ${leftScore}`;
+  rightScoreElement.textContent = `Score: ${rightScore}`;
 }
 
-canvas.addEventListener('mousemove', (e) => {
-  //comentar lo de abajo para desactivar
-  var mousePos = getMousePos(e);
-  var cords = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
-  console.log(cords)
-  rightPaddle.y = mousePos.y;
-  rightPaddle.x = mousePos.x;
-})
+const winner = () => {
+  const winnerText = document.getElementById('winner-text')
+  if(leftScore == 10){
+    isPaused = true
+    resetBall();
+    winnerText.textContent = `Right Winner winner chicken dinner`
+  }else if (rightScore == 10){
+    isPaused = true
+    resetBall();
+    winnerText.textContent = `Left Winner winner chicken dinner`
+  }
+}
+
+const drawPaddles = () => {
+  canvasCtx.fillStyle = 'grey';
+
+  // Dibujar paddle izquierdo
+  const leftPaddleX = paddleMargin;
+  canvasCtx.fillStyle = 'blue';
+  canvasCtx.fillRect(leftPaddleX, leftPaddleY, paddleWidth, paddleHeight);
+
+  // Dibujar paddle derecho
+  const rightPaddleX = canvasElement.width - paddleMargin - paddleWidth;
+  canvasCtx.fillStyle = 'red';
+  canvasCtx.fillRect(rightPaddleX, rightPaddleY, paddleWidth, paddleHeight);
+
+  // Dibujar línea en medio
+  const middleLineX = canvasElement.width / 2;
+  const middleLineYStart = 0;
+  const middleLineYEnd = canvasElement.height;
+  canvasCtx.strokeStyle = 'black';
+  canvasCtx.lineWidth = 2;
+  canvasCtx.beginPath();
+  canvasCtx.setLineDash([5, 5]); // Opcional: establece un patrón de guiones
+  canvasCtx.moveTo(middleLineX, middleLineYStart);
+  canvasCtx.lineTo(middleLineX, middleLineYEnd);
+  canvasCtx.stroke();
+}
+
+const drawBall = () => {
+  canvasCtx.fillStyle = 'red';
+  canvasCtx.fillRect(ballX, ballY, ballSize, ballSize);
+}
+
+const resetBall = () => {
+    ballX = canvasElement.width / 2 - ballSize / 2;
+    ballY = canvasElement.height / 2 - ballSize / 2;
+    ballSpeedX *= 1; // Cambia la dirección de la bola
+}
+
+const resetButton = document.getElementById('reset-button');
+resetButton.addEventListener('click', () => {
+  leftScore = 0;
+  rightScore = 0;
+  drawScores();
+  isPaused = true;
+  resetBall()
+});
+
+const updateBall = () => {
+  if (!isPaused) {
+    ballX += ballSpeedX;
+    ballY += ballSpeedY;
+  }
+  // Comprobar colisiones con los bordes del canvas
+  if (ballY <= 0 || ballY + ballSize >= canvasElement.height) {
+    ballSpeedY *= -1;
+  }
+
+  // Comprobar colisiones con los paddles
+  if (
+    ballX <= paddleMargin + paddleWidth &&
+    ballY + ballSize >= leftPaddleY &&
+    ballY <= leftPaddleY + paddleHeight
+  ) {
+    ballSpeedX *= -1;
+  }
+
+  if (
+    ballX + ballSize >= canvasElement.width - paddleMargin - paddleWidth &&
+    ballY + ballSize >= rightPaddleY &&
+    ballY <= rightPaddleY + paddleHeight
+  ) {
+    ballSpeedX *= -1;
+  }
+
+  // Comprobar colisiones con las paredes derecha e izquierda
+  if (ballX <= 0) {
+    rightScore++; // Incrementar el puntaje del lado derecho
+    resetBall();
+  } else if (ballX + ballSize >= canvasElement.width) {
+    leftScore++; // Incrementar el puntaje del lado izquierdo
+    resetBall();
+  }
+}
 
 
-requestAnimationFrame(loop);
 
-/*
-Pendientes:
-  Set win
-  Set Pause and Play
-  If win, play again
-  Move with mediaPipe
-*/
+const onResults = (results) => {
+  canvasCtx.save();
+  canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+  drawPaddles(); // Dibujar los paddles en cada frame
+  drawBall(); // Dibujar la bolita en cada frame
+  updateBall(); // Actualizar la posición de la bolita
+
+  if (results.multiHandLandmarks && results.multiHandedness) {
+    for (let i = 0; i < results.multiHandLandmarks.length; i++) {
+      const landmarks = results.multiHandLandmarks[i];
+      const hand = results.multiHandedness[i].label;
+
+      // Puedes utilizar los landmarks de cada mano para controlar la posición de los paddles
+      const indexFinger = landmarks[8]; // Usaremos la posición del dedo índice
+      if (hand === 'Left') {
+        leftPaddleY = canvasElement.height * indexFinger.y - paddleHeight / 2;
+        // Limitar la posición vertical del paddle izquierdo dentro del canvas
+        leftPaddleY = Math.max(0, Math.min(canvasElement.height - paddleHeight, leftPaddleY));
+
+        // drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, { color: '#00FF00', lineWidth: 5 });
+        // drawLandmarks(canvasCtx, landmarks, { color: 'blue', lineWidth: 2 });
+      } else if (hand === 'Right') {
+        rightPaddleY = canvasElement.height * indexFinger.y - paddleHeight / 2;
+        // Limitar la posición vertical del paddle derecho dentro del canvas
+        rightPaddleY = Math.max(0, Math.min(canvasElement.height - paddleHeight, rightPaddleY));
+
+        // drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, { color: '#00FF00', lineWidth: 5 });
+        // drawLandmarks(canvasCtx, landmarks, { color: 'red', lineWidth: 2 });
+      }
+    }
+  }
+
+  canvasCtx.restore();
+}
+
+const hands = new Hands({
+  locateFile: (file) => {
+    return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
+  },
+});
+hands.setOptions({
+  maxNumHands: 2,
+  modelComplexity: 1,
+  minDetectionConfidence: 0.5,
+  minTrackingConfidence: 0.5,
+});
+hands.onResults(onResults);
+
+const camera = new Camera(videoElement, {
+  onFrame: async () => {
+    await hands.send({ image: videoElement });
+  },
+  width: 1280,
+  height: 720,
+});
+
+const gameLoop = () => {
+  if (!isPaused) {
+    canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+    drawPaddles();
+    drawBall();
+    updateBall();
+    drawScores();
+    winner();
+  }
+
+    requestAnimationFrame(gameLoop);
+}
+
+
+camera.start();
+gameLoop();

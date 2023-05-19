@@ -1,5 +1,6 @@
 html {
 	background: #e0e0e0;
+	font-family: 'Courier New', Courier, monospace;
 }
 
 .game {
@@ -46,7 +47,6 @@ button:focus{
 
 .fps {
 	color: gray;
-	font-family: 'Courier New', Courier, monospace;
 	font-size: 2rem;
 	font-weight: bold;
 	position: absolute;
@@ -59,4 +59,28 @@ button:focus{
 	display: flex;
 	flex-direction: column;
 	justify-content: space-around;
+}
+
+.score {
+	display: flex;
+	justify-content: space-between;
+	width: 40rem;
+	font-size: 2rem;
+}
+
+.actions {
+	width: 80rem;
+	display: flex;
+	justify-content: space-around;
+}
+
+.title {
+	font-size: 5rem;
+	font-weight: bold;
+	color: grey;
+}
+
+#winner-text{
+	font-size: 2.5rem;
+	text-align: center;
 }
