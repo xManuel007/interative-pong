@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Interative Pong</title>
 
   <link rel="stylesheet" type="text/css" href="styles.css">
   <meta charset="UTF-8">
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
 </head>
+
 <body>
   <!--FPS-->
   <div class="fps">
@@ -24,6 +26,14 @@
       <button id="pause-button">Pause</button>
       <button id="play-button">Play</button>
       <button id="reset-button">Restart Game</button>
+      <div class="customCheckBoxHolder">
+        <input type="checkbox" id="cCB1" class="customCheckBoxInput">
+        <label for="cCB1" class="customCheckBoxWrapper">
+          <div class="customCheckBox">
+            <div class="inner">Show Hands</div>
+          </div>
+        </label>
+      </div>
     </div>
     <div class="info">
       <p id="winner-text"></p>
@@ -36,4 +46,5 @@
     <canvas class="output_canvas videoElement game" width="1280px" height="720px"></canvas>
   </div>
 </body>
+
 </html>

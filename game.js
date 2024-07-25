@@ -26,7 +26,19 @@ let ballSpeedY = 5;
 const pauseButton = document.getElementById('pause-button');
 const playButton = document.getElementById('play-button');
 
+
+const showHands = document.getElementById('cCB1')
+
 let isPaused = true;
+let handsShowing = false;
+
+const handleShowHands = () => {
+  handsShowing = !handsShowing
+}
+
+showHands.addEventListener('click', () => {
+  handleShowHands()
+})
 
 pauseButton.addEventListener('click', () => {
   isPaused = true;
@@ -36,7 +48,6 @@ pauseButton.addEventListener('click', () => {
 playButton.addEventListener('click', () => {
   isPaused = false;
 });
-
 
 
 //score
@@ -165,15 +176,26 @@ const onResults = (results) => {
         // Limitar la posición vertical del paddle izquierdo dentro del canvas
         leftPaddleY = Math.max(0, Math.min(canvasElement.height - paddleHeight, leftPaddleY));
 
-        // drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, { color: '#00FF00', lineWidth: 5 });
-        // drawLandmarks(canvasCtx, landmarks, { color: 'blue', lineWidth: 2 });
+
+        //Mano derecha
+
+        if(handsShowing) {
+          drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, { color: '#00FF00', lineWidth: 5 });
+          drawLandmarks(canvasCtx, landmarks, { color: 'blue', lineWidth: 2 });
+        }
+        //Mano derecha 
+
       } else if (hand === 'Right') {
         rightPaddleY = canvasElement.height * indexFinger.y - paddleHeight / 2;
         // Limitar la posición vertical del paddle derecho dentro del canvas
         rightPaddleY = Math.max(0, Math.min(canvasElement.height - paddleHeight, rightPaddleY));
 
-        // drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, { color: '#00FF00', lineWidth: 5 });
-        // drawLandmarks(canvasCtx, landmarks, { color: 'red', lineWidth: 2 });
+        //Mano izquierda
+        if(handsShowing) {
+          drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, { color: '#00FF00', lineWidth: 5 });
+          drawLandmarks(canvasCtx, landmarks, { color: 'red', lineWidth: 2 });
+        }
+        //Mano izquierda
       }
     }
   }
