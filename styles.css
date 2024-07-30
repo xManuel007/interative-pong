@@ -1,15 +1,5 @@
 html {
-	background: #e0e0e0;
 	font-family: 'Courier New', Courier, monospace;
-}
-
-.game {
-	border-radius: 22px;
-	background: #e0e0e0;
-	box-shadow:  20px 20px 40px #b3b3b3,
-             -20px -20px 40px #ffffff;
-	height: 720px;
-	width: 1280px;
 }
 
 .showhands {
@@ -52,44 +42,6 @@ button:focus{
 }
 
 
-.videoElement {
-	transform: scaleX(-1);
-}
-
-.fps {
-	color: gray;
-	font-size: 2rem;
-	font-weight: bold;
-	position: absolute;
-}
-
-.container {
-	align-items: center;
-	border-color: black;
-	border-width: 5px;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-around;
-}
-
-.score {
-	display: flex;
-	justify-content: space-between;
-	width: 40rem;
-	font-size: 2rem;
-}
-
-.actions {
-	width: 80rem;
-	display: flex;
-	justify-content: space-around;
-}
-
-.title {
-	font-size: 5rem;
-	font-weight: bold;
-	color: grey;
-}
 
 #winner-text{
 	font-size: 2.5rem;
@@ -97,10 +49,6 @@ button:focus{
 }
 
 
-.customCheckBoxHolder {
-	margin: 5px;
-	display: flex;
-}
 
 .customCheckBox {
 	width: fit-content;

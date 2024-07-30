@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="bg-[#e0e0e0]">
 
 <head>
   <title>Interative Pong</title>
@@ -10,23 +10,25 @@
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body>
   <!--FPS-->
-  <div class="fps">
+  <div class="text-gray-400 text-3xl font-bold absolute">
     <span id="fps">--</span> FPS
     <script src="fps.js"></script>
   </div>
   <script src="game.js" type="module"></script>
 
-  <div class="container" id="camara">
-    <div class="title">Interative Pong</div>
-    <div class="actions">
+  <div class="items-center flex flex-col justify-around" id="camara">
+    <div class="text-5xl text-gray-500 font-bold">Interative Pong</div>
+    <div class="w-[80rem] flex justify-around items-center">
       <button id="pause-button">Pause</button>
       <button id="play-button">Play</button>
       <button id="reset-button">Restart Game</button>
-      <div class="customCheckBoxHolder">
+
+      <div class="m-5 flex">
         <input type="checkbox" id="cCB1" class="customCheckBoxInput">
         <label for="cCB1" class="customCheckBoxWrapper">
           <div class="customCheckBox">
@@ -37,13 +39,13 @@
     </div>
     <div class="info">
       <p id="winner-text"></p>
-      <div class="score">
+      <div class="flex justify-between w-[40rem] text-2xl">
         <p id="right-score">Score: 0</p>
         <p id="left-score">Score: 0</p>
       </div>
     </div>
     <video class="input_video" hidden width="1280px" height="720px"></video>
-    <canvas class="output_canvas videoElement game" width="1280px" height="720px"></canvas>
+    <canvas class="output_canvas -scale-x-100 rounded-md shadow-xl" width="1280px" height="720px"></canvas>
   </div>
 </body>
 
